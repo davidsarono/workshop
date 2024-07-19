@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:playground/core/di/injectable.dart';
+import 'package:playground/domain/repositories/gemini_repository.dart';
 import 'package:playground/domain/repositories/user_repository.dart';
 import 'package:playground/presentation/pages/home/bloc/home_bloc.dart';
 import 'package:playground/presentation/pages/home/home_page.dart';
@@ -15,6 +16,7 @@ final router = GoRouter(
         return BlocProvider(
           create: (context) => HomeBloc(
             userRepository: getIt.get<UserRepository>(),
+            geminiRepository: getIt.get<GeminiRepository>(),
           )..add(const UsersRequested()),
           child: HomePage(
             key: state.pageKey,
