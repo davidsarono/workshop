@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:playground/core/di/injectable.dart';
 import 'package:playground/presentation/routes/router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    await dotenv.load(fileName: '.env');
 
     configureDependencies();
 
