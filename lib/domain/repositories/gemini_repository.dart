@@ -5,7 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:playground/domain/contracts/api/gemini_api.dart';
 
 const prompt = '''
-as an Artist, I want to create a poem based on an image provided by the user, so that I can generate a creative output. Here is the image:
+Generate creative poem based on provided image and only return the content of the poem.
 ''';
 
 @injectable
@@ -14,13 +14,13 @@ class GeminiRepository {
 
   GeminiRepository(this._api);
 
-  Future<String> generateContent({
+  Stream<GenerateContentResponse> generateContent({
     required File file,
-  }) async {
+  }) {
     try {
-      final bytes = await file.readAsBytes();
+      final bytes = file.readAsBytesSync();
 
-      final response = await _api.generateContent([
+      final response = _api.generateContent([
         Content(
           'user',
           [
@@ -32,7 +32,7 @@ class GeminiRepository {
           ],
         ),
       ]);
-      return response.text ?? 'ERROR';
+      return response;
     } catch (e) {
       rethrow;
     }

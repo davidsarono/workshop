@@ -41,8 +41,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
-      final poem = await _geminiRepository.generateContent(file: event.image);
-      emit(state.copyWith(status: HomeStatus.success, poem: poem));
+      final poem = _geminiRepository.generateContent(file: event.image);
+      await for (final content in poem) {
+        var poemContent = '';
+        if (state.poem != null) {
+          poemContent += state.poem!;
+        }
+
+        poemContent += content.text ?? '';
+        emit(state.copyWith(status: HomeStatus.success, poem: poemContent));
+      }
     } catch (error) {
       emit(state.copyWith(status: HomeStatus.failure));
     }

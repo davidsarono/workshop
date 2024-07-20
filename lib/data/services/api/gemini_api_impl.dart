@@ -9,11 +9,11 @@ class GeminiApiImpl implements GeminiApi {
   GeminiApiImpl(this.model);
 
   @override
-  Future<GenerateContentResponse> generateContent(
+  Stream<GenerateContentResponse> generateContent(
     List<Content> content,
-  ) async {
+  ) {
     try {
-      return await model.generateContent(content);
+      return model.generateContentStream(content);
     } catch (e) {
       rethrow;
     }

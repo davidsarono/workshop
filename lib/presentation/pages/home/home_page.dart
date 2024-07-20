@@ -15,36 +15,34 @@ class HomePage extends StatelessWidget {
         title: const Text('Home Page'),
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
-        buildWhen: (previous, current) => previous.status != current.status || previous.poem != current.poem,
+        buildWhen: (previous, current) => previous.poem != current.poem || previous.status != current.status,
         builder: (context, state) {
-          if (state.status == HomeStatus.loading) {
+          if (state.status == HomeStatus.loading && state.poem == null) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (state.status == HomeStatus.success && state.poem != null) {
+          if (state.poem == null) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(state.poem!),
+                  ElevatedButton(
+                    onPressed: () {
+                      _openGallery(context);
+                    },
+                    child: const Text('Generate Poem from Gallery'),
+                  ),
                 ],
-              )
+              ),
             );
           }
 
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _openGallery(context);
-                  },
-                  child: const Text('Generate Poem from Gallery'),
-                ),
-              ],
+            child: Text(
+              state.poem!,
+              textAlign: TextAlign.center,
             ),
           );
         },
